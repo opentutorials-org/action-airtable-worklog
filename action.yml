@@ -1,11 +1,11 @@
 name: 'Airtable Worklog'
 description: '오픈튜토리얼스 업무일지용 github action'
 inputs:
-  airtable-secret:  # id of input
+  AIRTABLE_SECRET:  # id of input
     description: 'Airtable API key'
     required: true
     default: ''
-  airtable-base:
+  AIRTABLE_BASE:
     description: 'Airtable base id'
     required: true
     default: ''

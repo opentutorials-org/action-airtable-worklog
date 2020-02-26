@@ -1,0 +1,14 @@
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+    - name: Hello world action step
+      id: hello
+      uses: opentutorials-org/action-airtable-worklog@v1
+      with:
+        AIRTABLE_SECRET: ${{ secret.AIRTABLE_SECRET }}
+        AIRTABLE_BASE: ${{ secret.AIRTABLE_BASE }}
+    

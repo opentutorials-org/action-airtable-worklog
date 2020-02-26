@@ -38,8 +38,8 @@ AIRTABLE_SECRET ,AIRTABLE_BASE ,GITHUB_REPOSITORY ,GITHUB_SHA ,GITHUB_ACTOR
   process.exit();
 }
 
-const airtable_secret = process.env.AIRTABLE_SECRET || core.getInput('airtable-secret');
-const airtable_base = process.env.AIRTABLE_BASE || core.getInput('airtable-base');
+const airtable_secret = process.env.AIRTABLE_SECRET || core.getInput('AIRTABLE_SECRET');
+const airtable_base = process.env.AIRTABLE_BASE || core.getInput('AIRTABLE_BASE');
 const github_repository = process.env.GITHUB_REPOSITORY;
 const github_commit_id = process.env.GITHUB_SHA;
 const github_actor = process.env.GITHUB_ACTOR;
