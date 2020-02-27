@@ -7,7 +7,7 @@ jobs:
     steps:
     - name: Hello world action step
       id: hello
-      uses: opentutorials-org/action-airtable-worklog@v1.0.6
+      uses: ./
       with:
         AIRTABLE_SECRET: ${{ secrets.AIRTABLE_SECRET }}
         AIRTABLE_BASE: ${{ secrets.AIRTABLE_BASE }}
