@@ -10,11 +10,6 @@ console.log(`
 # 소개
 커밋을 업무일지로 자동으로 등록해주는 스크립트입니다. 
 
-# 설치
-저장소내에 아래의 위치에 파일을 배치해야 합니다. 
- - .github/scripts/work.js
- - .github/workflows/work.yml
-
 github secret에 아래의 환경변수를 등록해야 합니다. 
  - AIRTABLE_SECRET
  - AIRTABLE_BASE
@@ -22,6 +17,7 @@ github secret에 아래의 환경변수를 등록해야 합니다.
 # 개발
  개발환경에서 실행할 때는 아래의 형식을 통해서 실행할 수 있습니다. 
 AIRTABLE_SECRET=*** GITHUB_REPOSITORY=opentutorials-org/work GITHUB_SHA=현재계정의커밋아이디 GITHUB_ACTOR=egoing AIRTABLE_BASE=appF3xUxbkNlKCJiL node work.js
+
 `)
 
 if(
@@ -38,11 +34,19 @@ AIRTABLE_SECRET ,AIRTABLE_BASE ,GITHUB_REPOSITORY ,GITHUB_SHA ,GITHUB_ACTOR
   process.exit();
 }
 
+
+
 const airtable_secret = process.env.AIRTABLE_SECRET || core.getInput('AIRTABLE_SECRET');
 const airtable_base = process.env.AIRTABLE_BASE || core.getInput('AIRTABLE_BASE');
 const github_repository = process.env.GITHUB_REPOSITORY;
 const github_commit_id = process.env.GITHUB_SHA;
 const github_actor = process.env.GITHUB_ACTOR;
+
+
+
+console.log(`
+AIRTABLE_SECRET=${airtable_secret.substr(0,2)+'..'+airtable_secret.substr(-2)} GITHUB_REPOSITORY=${github_repository} GITHUB_SHA=${github_commit_id} GITHUB_ACTOR=${github_actor} AIRTABLE_BASE=${airtable_base} node work.js
+`)
 
 var base = new Airtable({
   apiKey: airtable_secret
