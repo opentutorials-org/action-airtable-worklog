@@ -45,7 +45,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: 업무일지 대신 작성해주기 
       id: worklog
-      uses: opentutorials-org/action-airtable-worklog@v1.0.1
+      uses: opentutorials-org/action-airtable-worklog@v1.0.6
       with:
         AIRTABLE_SECRET: ${{ secrets.AIRTABLE_SECRET }} 
         AIRTABLE_BASE: ${{ secrets.AIRTABLE_BASE }} 
