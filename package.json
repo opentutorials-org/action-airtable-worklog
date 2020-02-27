@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build index.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
     "@actions/github": "^2.1.1",
     "airtable": "^0.8.1",
     "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "^0.21.1"
   }
 }
