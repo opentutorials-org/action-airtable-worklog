@@ -103,6 +103,7 @@ function create(actor_id, commit_msg, consume_time) {
 }
 
 function getCommitMessage(commit_id, cb) {
+  console.log(`git log ${commit_id} -1`);
   const ls = spawn('git', ['log', commit_id, '-1']);
   ls.stdout.on('data', (data) => {
     cb(data.toString());
