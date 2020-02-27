@@ -2952,7 +2952,7 @@ github secret에 아래의 환경변수를 등록해야 합니다.
 
 # 개발
  개발환경에서 실행할 때는 아래의 형식을 통해서 실행할 수 있습니다. 
-AIRTABLE_SECRET=*** GITHUB_REPOSITORY=opentutorials-org/work GITHUB_SHA=현재계정의커밋아이디 GITHUB_ACTOR=egoing AIRTABLE_BASE=appF3xUxbkNlKCJiL node work.js
+AIRTABLE_SECRET=*** GITHUB_REPOSITORY=opentutorials-org/work GITHUB_SHA=현재계정의커밋아이디 GITHUB_ACTOR=egoing AIRTABLE_BASE=appF3xUxbkNlKCJiL node index.js
 
 `)
 
@@ -2981,7 +2981,7 @@ const github_actor = process.env.GITHUB_ACTOR;
 
 
 console.log(`
-AIRTABLE_SECRET=${airtable_secret.substr(0,2)+'..'+airtable_secret.substr(-2)} GITHUB_REPOSITORY=${github_repository} GITHUB_SHA=${github_commit_id} GITHUB_ACTOR=${github_actor} AIRTABLE_BASE=${airtable_base} node work.js
+AIRTABLE_SECRET=${airtable_secret.substr(0,2)+'..'+airtable_secret.substr(-2)} GITHUB_REPOSITORY=${github_repository} GITHUB_SHA=${github_commit_id} GITHUB_ACTOR=${github_actor} AIRTABLE_BASE=${airtable_base} node index.js
 `)
 
 var base = new Airtable({
@@ -3045,11 +3045,11 @@ function getCommitMessage(commit_id, cb) {
     cb(data.toString());
   });
   log.stderr.on('data', (data) => {
-    console.error(`getCommitMessage error`, data);
+    console.error(`getCommitMessage error`, data.toString());
     // cb(data.toString());
   });
   log.on('close', (data) => {
-    console.error(`getCommitMessage close`, data);
+    console.info(`getCommitMessage close`, data);
     // cb(data.toString());
   });
 }
