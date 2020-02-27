@@ -3040,9 +3040,17 @@ function create(actor_id, commit_msg, consume_time) {
 
 function getCommitMessage(commit_id, cb) {
   console.log(`git log ${commit_id} -1`);
-  const ls = spawn('git', ['log', commit_id, '-1']);
-  ls.stdout.on('data', (data) => {
+  const log = spawn('git', ['log', commit_id, '-1']);
+  log.stdout.on('data', (data) => {
     cb(data.toString());
+  });
+  log.stderr.on('data', (data) => {
+    console.error(`getCommitMessage error`, data);
+    // cb(data.toString());
+  });
+  log.on('close', (data) => {
+    console.error(`getCommitMessage close`, data);
+    // cb(data.toString());
   });
 }
 

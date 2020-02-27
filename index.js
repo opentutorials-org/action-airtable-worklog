@@ -109,7 +109,11 @@ function getCommitMessage(commit_id, cb) {
     cb(data.toString());
   });
   log.stderr.on('data', (data) => {
-    console.error(`error`, data);
+    console.error(`getCommitMessage error`, data);
+    // cb(data.toString());
+  });
+  log.on('close', (data) => {
+    console.error(`getCommitMessage close`, data);
     // cb(data.toString());
   });
 }
