@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const https = require('https');
 var Airtable = require('airtable');
 const {
   spawn
@@ -74,7 +75,7 @@ function getGithubId(githubid, cb) {
   });
 }
 
-function create(actor_id, commit_msg, consume_time) {
+function create(actor_id, commit_msg, consume_time, typeId) {
   var commit_url = `http://github.com/${github_repository}/commit/${github_commit_id}`;
   var commits = commit_msg.split('\n');
   var commit_only_message = commits.splice(4).join('\n').trim().substr(0, 100);
@@ -87,7 +88,8 @@ function create(actor_id, commit_msg, consume_time) {
       "작업시간 (시간)": consume_time,
       "업무명": commit_only_message,
       "업무내용": commit_msg,
-      "작업일": moment().format('YYYY-MM-DD')
+      "작업일": moment().format('YYYY-MM-DD'),
+      "업무종류": [typeId]
     }
   }
   console.log('data', data);
@@ -127,14 +129,46 @@ function getConsumeTimeFromCommitMessage(commit_msg) {
   return '0';
 }
 
-getCommitMessage(github_commit_id, commit_msg => {
+async function getAirtableTypeId(name='이메일') {
+  return new Promise(function(resolve, reject){
+    const options = {
+      headers: {
+        Authorization: `Bearer ${process.env.AIRTABLE_SECRET}`
+      },
+      method: 'GET'
+    };
+    const URL = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE}/%EC%97%85%EB%AC%B4%EC%A2%85%EB%A5%98?maxRecords=1000&view=Grid%20view`;
+    const req = https.get(URL, options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      })
+      res.on('end', () => {
+        var records = JSON.parse(data).records;
+        console.log("getAirtableEmailTypeId -> records", records)
+        for (var i = 0; i < records.length; i++) {
+          if(records[i].fields.Name === name){
+            resolve(records[i].id);
+            return true;
+          }
+        }
+      })
+    });
+    req.end();
+  })
+  reject('업무타임의 아이디값을 구할 수 없습니다.');
+}
+
+ getCommitMessage(github_commit_id, commit_msg => {
   console.log('commit_msg', commit_msg);
   var consume_time = getConsumeTimeFromCommitMessage(commit_msg);
   console.log('consume time', consume_time);
-  getGithubId(github_actor, data => {
+  getGithubId(github_actor, async data => {
     console.log('actor', data);
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);
-    create(data.id, commit_msg, consume_time);
+    const typeId = await getAirtableTypeId('커밋');
+    console.log('typeid', typeId);
+    create(data.id, commit_msg, consume_time, typeId);
   });
 });
