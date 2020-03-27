@@ -41,8 +41,6 @@ const github_repository = process.env.GITHUB_REPOSITORY;
 const github_commit_id = process.env.GITHUB_SHA;
 const github_actor = process.env.GITHUB_ACTOR;
 
-console.log('process.env.AIRTABLE_SECRET', process.env.AIRTABLE_SECRET, airtable_secret, 'process.env.AIRTABLE_BASE', process.env.AIRTABLE_BASE, airtable_base);
-
 console.log(`
 AIRTABLE_SECRET=${airtable_secret.substr(0,2)+'..'+airtable_secret.substr(-2)} GITHUB_REPOSITORY=${github_repository} GITHUB_SHA=${github_commit_id} GITHUB_ACTOR=${github_actor} AIRTABLE_BASE=${airtable_base} node index.js
 `)
