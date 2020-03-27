@@ -41,7 +41,7 @@ const github_repository = process.env.GITHUB_REPOSITORY;
 const github_commit_id = process.env.GITHUB_SHA;
 const github_actor = process.env.GITHUB_ACTOR;
 
-console.log('process.env.AIRTABLE_SECRET', process.env.AIRTABLE_SECRET, 'process.env.AIRTABLE_BASE', process.env.AIRTABLE_BASE);
+console.log('process.env.AIRTABLE_SECRET', process.env.AIRTABLE_SECRET, airtable_secret, 'process.env.AIRTABLE_BASE', process.env.AIRTABLE_BASE, airtable_base);
 
 console.log(`
 AIRTABLE_SECRET=${airtable_secret.substr(0,2)+'..'+airtable_secret.substr(-2)} GITHUB_REPOSITORY=${github_repository} GITHUB_SHA=${github_commit_id} GITHUB_ACTOR=${github_actor} AIRTABLE_BASE=${airtable_base} node index.js
@@ -131,11 +131,11 @@ async function getAirtableTypeId(name='이메일') {
   return new Promise(function(resolve, reject){
     const options = {
       headers: {
-        Authorization: `Bearer ${process.env.AIRTABLE_SECRET}`
+        Authorization: `Bearer ${airtable_secret}`
       },
       method: 'GET'
     };
-    const URL = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE}/%EC%97%85%EB%AC%B4%EC%A2%85%EB%A5%98?maxRecords=1000&view=Grid%20view`;
+    const URL = `https://api.airtable.com/v0/${airtable_base}/%EC%97%85%EB%AC%B4%EC%A2%85%EB%A5%98?maxRecords=1000&view=Grid%20view`;
     const req = https.get(URL, options, (res) => {
       let data = '';
       res.on('data', (chunk) => {
