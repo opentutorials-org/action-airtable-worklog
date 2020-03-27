@@ -7,8 +7,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Hello world action step
-      id: hello
+    - name: submit to airtable action step
+      id: submit
       uses: ./
       with:
         AIRTABLE_SECRET: ${{ secrets.AIRTABLE_SECRET }}
