@@ -3079,7 +3079,8 @@ async function getAirtableTypeId(name='이메일') {
       })
       res.on('end', () => {
         var records = JSON.parse(data).records;
-        console.log("getAirtableEmailTypeId -> records", records)
+        console.log('URL', URL);
+        console.log("getAirtableEmailTypeId -> records", records, data);
         for (var i = 0; i < records.length; i++) {
           if(records[i].fields.Name === name){
             resolve(records[i].id);
@@ -3088,6 +3089,9 @@ async function getAirtableTypeId(name='이메일') {
         }
       })
     });
+    req.on('error', (e)=>{
+      console.log("getAirtableEmailTypeId error ", e);
+    })
     req.end();
   })
   reject('업무타임의 아이디값을 구할 수 없습니다.');
