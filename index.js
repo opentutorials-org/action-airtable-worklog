@@ -12,8 +12,8 @@ console.log(`
 커밋을 업무일지로 자동으로 등록해주는 스크립트입니다. 
 
 github secret에 아래의 환경변수를 등록해야 합니다. 
- - AIRTABLE_SECRET
- - AIRTABLE_BASE
+ + AIRTABLE_SECRET
+ + AIRTABLE_BASE
 
 # 개발
  개발환경에서 실행할 때는 아래의 형식을 통해서 실행할 수 있습니다. 
