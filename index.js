@@ -35,10 +35,6 @@ AIRTABLE_SECRET ,AIRTABLE_BASE ,GITHUB_REPOSITORY ,GITHUB_SHA ,GITHUB_ACTOR
   process.exit();
 }
 
-console.log('version 1');
-
-
-
 const airtable_secret = process.env.AIRTABLE_SECRET || core.getInput('AIRTABLE_SECRET');
 const airtable_base = process.env.AIRTABLE_BASE || core.getInput('AIRTABLE_BASE');
 const github_repository = process.env.GITHUB_REPOSITORY;

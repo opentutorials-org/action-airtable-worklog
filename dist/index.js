@@ -2936,6 +2936,7 @@ module.exports = Query;
 
 const core = __webpack_require__(470);
 const github = __webpack_require__(469);
+const https = __webpack_require__(34);
 var Airtable = __webpack_require__(37);
 const {
   spawn
@@ -2947,8 +2948,8 @@ console.log(`
 커밋을 업무일지로 자동으로 등록해주는 스크립트입니다. 
 
 github secret에 아래의 환경변수를 등록해야 합니다. 
- - AIRTABLE_SECRET
- - AIRTABLE_BASE
+ + AIRTABLE_SECRET
+ + AIRTABLE_BASE
 
 # 개발
  개발환경에서 실행할 때는 아래의 형식을 통해서 실행할 수 있습니다. 
@@ -2969,8 +2970,6 @@ AIRTABLE_SECRET ,AIRTABLE_BASE ,GITHUB_REPOSITORY ,GITHUB_SHA ,GITHUB_ACTOR
   `);
   process.exit();
 }
-
-
 
 const airtable_secret = process.env.AIRTABLE_SECRET || core.getInput('AIRTABLE_SECRET');
 const airtable_base = process.env.AIRTABLE_BASE || core.getInput('AIRTABLE_BASE');
@@ -3010,7 +3009,7 @@ function getGithubId(githubid, cb) {
   });
 }
 
-function create(actor_id, commit_msg, consume_time) {
+function create(actor_id, commit_msg, consume_time, typeId) {
   var commit_url = `http://github.com/${github_repository}/commit/${github_commit_id}`;
   var commits = commit_msg.split('\n');
   var commit_only_message = commits.splice(4).join('\n').trim().substr(0, 100);
@@ -3023,7 +3022,8 @@ function create(actor_id, commit_msg, consume_time) {
       "작업시간 (시간)": consume_time,
       "업무명": commit_only_message,
       "업무내용": commit_msg,
-      "작업일": moment().format('YYYY-MM-DD')
+      "작업일": moment().format('YYYY-MM-DD'),
+      "업무종류": [typeId]
     }
   }
   console.log('data', data);
@@ -3063,17 +3063,50 @@ function getConsumeTimeFromCommitMessage(commit_msg) {
   return '0';
 }
 
-getCommitMessage(github_commit_id, commit_msg => {
+async function getAirtableTypeId(name='이메일') {
+  return new Promise(function(resolve, reject){
+    const options = {
+      headers: {
+        Authorization: `Bearer ${process.env.AIRTABLE_SECRET}`
+      },
+      method: 'GET'
+    };
+    const URL = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE}/%EC%97%85%EB%AC%B4%EC%A2%85%EB%A5%98?maxRecords=1000&view=Grid%20view`;
+    const req = https.get(URL, options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      })
+      res.on('end', () => {
+        var records = JSON.parse(data).records;
+        console.log("getAirtableEmailTypeId -> records", records)
+        for (var i = 0; i < records.length; i++) {
+          if(records[i].fields.Name === name){
+            resolve(records[i].id);
+            return true;
+          }
+        }
+      })
+    });
+    req.end();
+  })
+  reject('업무타임의 아이디값을 구할 수 없습니다.');
+}
+
+ getCommitMessage(github_commit_id, commit_msg => {
   console.log('commit_msg', commit_msg);
   var consume_time = getConsumeTimeFromCommitMessage(commit_msg);
   console.log('consume time', consume_time);
-  getGithubId(github_actor, data => {
+  getGithubId(github_actor, async data => {
     console.log('actor', data);
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);
-    create(data.id, commit_msg, consume_time);
+    const typeId = await getAirtableTypeId('커밋');
+    console.log('typeid', typeId);
+    create(data.id, commit_msg, consume_time, typeId);
   });
 });
+
 
 /***/ }),
 /* 105 */,
