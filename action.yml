@@ -9,6 +9,10 @@ inputs:
     description: 'Airtable base id'
     required: true
     default: ''
+  TYPE:
+    description: 'push or issue'
+    required: false
+    default: 'push'
 outputs:
   result: # id of output
     description: '실행결과 및 로그'
