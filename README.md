@@ -32,7 +32,7 @@ Actions 메뉴로 들어가서 Set up a workflow yourself 버튼을 누릅니다
 main.yml 이라는 이름으로 아래와 같이 설정 파일의 내용을 입력합니다. 
 
 ```
-name: CI
+name: action-airtable-worklog
 
 on: [push]
 
@@ -43,12 +43,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: 업무일지 대신 작성해주기 
+    - name: submit work log
       id: worklog
-      uses: opentutorials-org/action-airtable-worklog@v1.0.6
+      uses: opentutorials-org/action-airtable-worklog@master
       with:
         AIRTABLE_SECRET: ${{ secrets.AIRTABLE_SECRET }} 
         AIRTABLE_BASE: ${{ secrets.AIRTABLE_BASE }} 
+
 
 ```
 
