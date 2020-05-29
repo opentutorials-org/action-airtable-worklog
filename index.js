@@ -17,7 +17,7 @@ github secret에 아래의 환경변수를 등록해야 합니다.
 
 # 개발
  개발환경에서 실행할 때는 아래의 형식을 통해서 실행할 수 있습니다. 
-AIRTABLE_SECRET=*** GITHUB_REPOSITORY=opentutorials-org/work GITHUB_SHA=현재계정의커밋아이디 GITHUB_ACTOR=egoing AIRTABLE_BASE=appF3xUxbkNlKCJiL node index.js
+AIRTABLE_SECRET=*** GITHUB_REPOSITORY=opentutorials-org/work GITHUB_SHA=현재계정의커밋아이디 GITHUB_ACTOR=egoing AIRTABLE_BASE=AIRTABLE_BASE=appWF9I4buXN4Gcvg node index.js
 
 `)
 
