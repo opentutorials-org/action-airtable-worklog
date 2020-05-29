@@ -161,7 +161,7 @@ async function getAirtableTypeId(name='이메일') {
 
  getCommitMessage(github_commit_id, commit_msg => {
   console.log('commit_msg', commit_msg);
-  var consume_time = getConsumeTimeFromCommitMessage(commit_msg);
+  var consume_time = Number(getConsumeTimeFromCommitMessage(commit_msg));
   console.log('consume time', consume_time);
   getGithubId(github_actor, async data => {
     console.log('actor', data);
