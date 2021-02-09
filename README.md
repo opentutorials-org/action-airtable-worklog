@@ -17,19 +17,11 @@ airtable의 api_key와 base의 식별자를 알아야 합니다. 아래 주소�
 https://airtable.com/api
 
 ## Github 
-### Secret 값 설정하기
-본 Action을 이용하기 위해서는 저장소 설정에서 secret 값을 추가해주셔야 합니다. 
-Settings/Secrets/ Add a new secret 
-
-예를들면 서말의 경우 아래 경로로 접근할 수 있습니다. 
-https://github.com/opentutorials-org/seomal/settings/secrets
-
- - AIRTABLE_SECRET
- - AIRTABLE_BASE
 
 ### Action 설정하기
 Actions 메뉴로 들어가서 Set up a workflow yourself 버튼을 누릅니다. 
 main.yml 이라는 이름으로 아래와 같이 설정 파일의 내용을 입력합니다. 
+secrets.AIRTABLE_SECRET, AIRTABLE_BASE 값은 opentutorials-org 차원에서 적용 되었기 때문에 개별 저장소에서 값을 설정하지는 않아도 됩니다. 
 
 ```
 name: action-airtable-worklog
