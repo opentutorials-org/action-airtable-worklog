@@ -22,7 +22,7 @@
     "@actions/core": "^1.2.2",
     "@actions/github": "^2.1.1",
     "airtable": "^0.8.1",
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.21.1"
