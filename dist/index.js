@@ -3019,7 +3019,7 @@ if (eventName === "push") {
             const Id = await getAirtableId("이슈댓글");
             const ISSUE_TITLE = payload.issue.title || "";
             const COMMENT_BODY = payload.comment.body || "";
-            const ISSUE_URL = payload.issue.html_url || "";
+            const COMMENT_URL = payload.comment.html_url || ""; // 변경된 부분
             const consume_time = Number(
                 getConsumeTimeFromMessage(COMMENT_BODY)
             );
@@ -3028,7 +3028,7 @@ if (eventName === "push") {
                     data.id,
                     ISSUE_TITLE,
                     COMMENT_BODY,
-                    ISSUE_URL,
+                    COMMENT_URL, // 변경된 부분
                     consume_time,
                     Id
                 );
