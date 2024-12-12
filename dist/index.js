@@ -2855,7 +2855,7 @@ function getGithubId(githubid, cb) {
         );
 }
 
-function create(actor_id, commit_msg, consume_time, typeId) {
+function create(actor_id, commit_msg, consume_time, Id) {
     var commit_url = `http://github.com/${github_repository}/commit/${github_commit_id}`;
     var commits = commit_msg.split("\n");
     var commit_only_message = commits
@@ -2871,7 +2871,7 @@ function create(actor_id, commit_msg, consume_time, typeId) {
             업무명: commit_only_message,
             업무내용: commit_msg,
             작업일: moment().format("YYYY-MM-DD"),
-            업무종류: [typeId],
+            업무종류: [Id],
         },
     };
     console.log("data", data);
@@ -2892,7 +2892,7 @@ function createForIssue(
     issue_body,
     issue_url,
     consume_time,
-    typeId
+    Id
 ) {
     var data = {
         fields: {
@@ -2902,7 +2902,7 @@ function createForIssue(
             업무명: issue_title,
             업무내용: issue_body,
             작업일: moment().format("YYYY-MM-DD"),
-            업무종류: [typeId],
+            업무종류: [Id],
         },
     };
     console.log("issue data", data);
@@ -2941,7 +2941,7 @@ function getConsumeTimeFromMessage(msg) {
     return "0";
 }
 
-async function getAirtableTypeId(name = "이메일") {
+async function getAirtableId(name = "이메일") {
     return new Promise(function (resolve, reject) {
         const options = {
             headers: {
@@ -2967,7 +2967,7 @@ async function getAirtableTypeId(name = "이메일") {
             });
         });
         req.on("error", (e) => {
-            console.log("getAirtableTypeId error ", e);
+            console.log("getAirtableId error ", e);
             reject(e);
         });
         req.end();
@@ -2981,30 +2981,34 @@ if (eventName === "push") {
         console.log("commit_msg", commit_msg);
         var consume_time = Number(getConsumeTimeFromMessage(commit_msg));
         console.log("consume time", consume_time);
-        getGithubId(github_actor, async (data) => {
-            console.log("actor", data);
-            const typeId = await getAirtableTypeId("커밋");
-            create(data.id, commit_msg, consume_time, typeId);
-        });
+        if (consume_time > 0) {
+            getGithubId(github_actor, async (data) => {
+                console.log("actor", data);
+                const Id = await getAirtableId("커밋");
+                create(data.id, commit_msg, consume_time, Id);
+            });
+        }
     });
 } else if (eventName === "issues") {
     // issue 이벤트 처리
     if (payload.issue) {
         getGithubId(github_actor, async (data) => {
             console.log("actor", data);
-            const typeId = await getAirtableTypeId("이슈");
+            const Id = await getAirtableId("이슈");
             const ISSUE_TITLE = payload.issue.title || "";
             const ISSUE_BODY = payload.issue.body || "";
             const ISSUE_URL = payload.issue.html_url || "";
             const consume_time = Number(getConsumeTimeFromMessage(ISSUE_BODY));
-            createForIssue(
-                data.id,
-                ISSUE_TITLE,
-                ISSUE_BODY,
-                ISSUE_URL,
-                consume_time,
-                typeId
-            );
+            if (consume_time > 0) {
+                createForIssue(
+                    data.id,
+                    ISSUE_TITLE,
+                    ISSUE_BODY,
+                    ISSUE_URL,
+                    consume_time,
+                    Id
+                );
+            }
         });
     }
 } else if (eventName === "issue_comment") {
@@ -3012,21 +3016,23 @@ if (eventName === "push") {
     if (payload.issue && payload.comment) {
         getGithubId(github_actor, async (data) => {
             console.log("actor", data);
-            const typeId = await getAirtableTypeId("이슈댓글");
+            const Id = await getAirtableId("이슈댓���");
             const ISSUE_TITLE = payload.issue.title || "";
             const COMMENT_BODY = payload.comment.body || "";
             const ISSUE_URL = payload.issue.html_url || "";
             const consume_time = Number(
                 getConsumeTimeFromMessage(COMMENT_BODY)
             );
-            createForIssue(
-                data.id,
-                ISSUE_TITLE,
-                COMMENT_BODY,
-                ISSUE_URL,
-                consume_time,
-                typeId
-            );
+            if (consume_time > 0) {
+                createForIssue(
+                    data.id,
+                    ISSUE_TITLE,
+                    COMMENT_BODY,
+                    ISSUE_URL,
+                    consume_time,
+                    Id
+                );
+            }
         });
     }
 } else {
