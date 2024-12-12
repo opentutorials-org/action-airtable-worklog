@@ -198,11 +198,13 @@ if (eventName === "push") {
         console.log("commit_msg", commit_msg);
         var consume_time = Number(getConsumeTimeFromMessage(commit_msg));
         console.log("consume time", consume_time);
-        getGithubId(github_actor, async (data) => {
-            console.log("actor", data);
-            const Id = await getAirtableId("커밋");
-            create(data.id, commit_msg, consume_time, Id);
-        });
+        if (consume_time > 0) {
+            getGithubId(github_actor, async (data) => {
+                console.log("actor", data);
+                const Id = await getAirtableId("커밋");
+                create(data.id, commit_msg, consume_time, Id);
+            });
+        }
     });
 } else if (eventName === "issues") {
     // issue 이벤트 처리
@@ -214,14 +216,16 @@ if (eventName === "push") {
             const ISSUE_BODY = payload.issue.body || "";
             const ISSUE_URL = payload.issue.html_url || "";
             const consume_time = Number(getConsumeTimeFromMessage(ISSUE_BODY));
-            createForIssue(
-                data.id,
-                ISSUE_TITLE,
-                ISSUE_BODY,
-                ISSUE_URL,
-                consume_time,
-                Id
-            );
+            if (consume_time > 0) {
+                createForIssue(
+                    data.id,
+                    ISSUE_TITLE,
+                    ISSUE_BODY,
+                    ISSUE_URL,
+                    consume_time,
+                    Id
+                );
+            }
         });
     }
 } else if (eventName === "issue_comment") {
@@ -229,21 +233,23 @@ if (eventName === "push") {
     if (payload.issue && payload.comment) {
         getGithubId(github_actor, async (data) => {
             console.log("actor", data);
-            const Id = await getAirtableId("이슈댓글");
+            const Id = await getAirtableId("이슈댓���");
             const ISSUE_TITLE = payload.issue.title || "";
             const COMMENT_BODY = payload.comment.body || "";
             const ISSUE_URL = payload.issue.html_url || "";
             const consume_time = Number(
                 getConsumeTimeFromMessage(COMMENT_BODY)
             );
-            createForIssue(
-                data.id,
-                ISSUE_TITLE,
-                COMMENT_BODY,
-                ISSUE_URL,
-                consume_time,
-                Id
-            );
+            if (consume_time > 0) {
+                createForIssue(
+                    data.id,
+                    ISSUE_TITLE,
+                    COMMENT_BODY,
+                    ISSUE_URL,
+                    consume_time,
+                    Id
+                );
+            }
         });
     }
 } else {
