@@ -233,7 +233,7 @@ if (eventName === "push") {
     if (payload.issue && payload.comment) {
         getGithubId(github_actor, async (data) => {
             console.log("actor", data);
-            const Id = await getAirtableId("이슈댓���");
+            const Id = await getAirtableId("이슈댓글");
             const ISSUE_TITLE = payload.issue.title || "";
             const COMMENT_BODY = payload.comment.body || "";
             const ISSUE_URL = payload.issue.html_url || "";
