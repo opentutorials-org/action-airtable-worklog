@@ -5,6 +5,8 @@ var Airtable = require("airtable");
 const { spawn } = require("child_process");
 const moment = require("moment");
 
+const DEFAULT_CONSUME_TIME = 0.05;
+
 console.log(`
 # 소개
 커밋/이슈/커멘트를 업무일지로 자동으로 등록해주는 스크립트입니다.
@@ -196,7 +198,10 @@ if (eventName === "push") {
     // push 이벤트 처리
     getCommitMessage(github_commit_id, (commit_msg) => {
         console.log("commit_msg", commit_msg);
-        var consume_time = Number(getConsumeTimeFromMessage(commit_msg));
+        let consume_time = Number(getConsumeTimeFromMessage(commit_msg));
+        if (consume_time === 0) {
+            consume_time = DEFAULT_CONSUME_TIME;
+        }
         console.log("consume time", consume_time);
         if (consume_time > 0) {
             getGithubId(github_actor, async (data) => {
@@ -215,7 +220,10 @@ if (eventName === "push") {
             const ISSUE_TITLE = payload.issue.title || "";
             const ISSUE_BODY = payload.issue.body || "";
             const ISSUE_URL = payload.issue.html_url || "";
-            const consume_time = Number(getConsumeTimeFromMessage(ISSUE_BODY));
+            let consume_time = Number(getConsumeTimeFromMessage(ISSUE_BODY));
+            if (consume_time === 0) {
+                consume_time = DEFAULT_CONSUME_TIME;
+            }
             if (consume_time > 0) {
                 createForIssue(
                     data.id,
@@ -237,9 +245,10 @@ if (eventName === "push") {
             const ISSUE_TITLE = payload.issue.title || "";
             const COMMENT_BODY = payload.comment.body || "";
             const COMMENT_URL = payload.comment.html_url || ""; // 변경된 부분
-            const consume_time = Number(
-                getConsumeTimeFromMessage(COMMENT_BODY)
-            );
+            let consume_time = Number(getConsumeTimeFromMessage(COMMENT_BODY));
+            if (consume_time === 0) {
+                consume_time = DEFAULT_CONSUME_TIME;
+            }
             if (consume_time > 0) {
                 createForIssue(
                     data.id,
