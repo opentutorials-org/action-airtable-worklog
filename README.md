@@ -26,21 +26,26 @@ secrets.AIRTABLE_SECRET, AIRTABLE_BASE 값은 opentutorials-org 차원에서 적
 ```
 name: action-airtable-worklog
 
-on: [push]
+on:
+    push:
+    issues:
+        types: [opened]
+    issue_comment:
+        types: [created]
 
 jobs:
-  build:
+    build:
+        runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: submit work log
-      id: worklog
-      uses: opentutorials-org/action-airtable-worklog@master
-      with:
-        AIRTABLE_SECRET: ${{ secrets.AIRTABLE_SECRET }} 
-        AIRTABLE_BASE: ${{ secrets.AIRTABLE_BASE }} 
+            - name: Submit work log (push/issues)
+              uses: opentutorials-org/action-airtable-worklog@master
+              with:
+                  AIRTABLE_SECRET: ${{ secrets.AIRTABLE_SECRET }}
+                  AIRTABLE_BASE: ${{ secrets.AIRTABLE_BASE }}
+                  TYPE: ${{ github.event_name }}
 
 
 ```
