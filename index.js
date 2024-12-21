@@ -217,7 +217,7 @@ if (eventName === "push") {
         getGithubId(github_actor, async (data) => {
             console.log("actor", data);
             const Id = await getAirtableId("이슈");
-            const ISSUE_TITLE = (payload.issue.title || "") + " 이슈 발행";
+            const ISSUE_TITLE = (payload.issue.title || "") + " (발행)";
             const ISSUE_BODY = payload.issue.body || "";
             const ISSUE_URL = payload.issue.html_url || "";
             let consume_time = Number(getConsumeTimeFromMessage(ISSUE_BODY));
@@ -242,8 +242,8 @@ if (eventName === "push") {
         getGithubId(github_actor, async (data) => {
             console.log("actor", data);
             const Id = await getAirtableId("이슈댓글");
-            const ISSUE_TITLE = payload.issue.title || "";
-            const COMMENT_BODY = (payload.comment.body || "") + " 댓글 추가";
+            const ISSUE_TITLE = (payload.issue.title || "") + "(댓글)";
+            const COMMENT_BODY = payload.comment.body || "";
             const COMMENT_URL = payload.comment.html_url || ""; // 변경된 부분
             let consume_time = Number(getConsumeTimeFromMessage(COMMENT_BODY));
             if (consume_time === 0) {
